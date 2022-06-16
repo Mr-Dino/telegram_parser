@@ -1,0 +1,7 @@
+asyncpg==0.25.0
+pyaes==1.6.1
+pyaml==21.10.1
+pyasn1==0.4.8
+PyYAML==6.0
+rsa==4.8
+Telethon==1.24.0

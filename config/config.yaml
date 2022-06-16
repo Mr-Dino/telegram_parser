@@ -1,0 +1,13 @@
+TELEGRAM:
+  api_id: 11111111
+  api_hash: 11aaaaa111111aa1a1111aa111111111
+  session_name: session_name
+  urls:
+    first_url: "https://t.me/tproger_official"
+PG:
+  user: 'user'
+  password: 'password'
+  database: 'database'
+  host: '127.0.0.1'
+  port: 5432
+SPAM_MORE: 1
