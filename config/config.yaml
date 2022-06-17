@@ -1,3 +1,4 @@
+
 TELEGRAM:
   api_id: 11111111
   api_hash: 11aaaaa111111aa1a1111aa111111111
@@ -10,4 +11,4 @@ PG:
   database: 'database'
   host: '127.0.0.1'
   port: 5432
-SPAM_MORE: 1
+SPAM: 1

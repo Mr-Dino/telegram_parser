@@ -24,8 +24,8 @@ async def main(url):
     client, db_conn = await connect()
     channel = await client.get_entity(url)
     users_messages = await get_users_messages_count(client, channel)
-    spammers = find_spammers(users_messages)
-    await insert_users(spammers, client, db_conn)
+    users_list = find_users(users_messages)
+    await insert_users(users_list, client, db_conn)
     await disconnect(client, db_conn)
 
 
@@ -51,7 +51,7 @@ async def connect():
 async def get_users_messages_count(client, channel):
     """Функция для получения списка пользователей с сообщениями и их кол-вом"""
     users_messages = defaultdict(lambda: defaultdict(int))
-    posts = await client.get_messages(channel, limit=50)
+    posts = await client.get_messages(channel, limit=10)
     for post in posts:
         if post.replies and post.replies.replies != 0:
             async for message in client.iter_messages(channel, reply_to=post.id):
@@ -67,10 +67,10 @@ async def disconnect(client, db_conn):
 
 
 async def insert_users(users_list, client, db_conn):
-    """Функция добавления спамящих пользователей в БД"""
+    """Функция добавления пользователей в БД"""
     for user in users_list:
         user_info = await client(GetFullUserRequest(user))
-        command = '''INSERT INTO spam_users (first_name, last_name, phone, user_id, is_avatar, region) VALUES ($1, $2, $3, $4, $5, $6);'''
+        command = '''INSERT INTO users (first_name, last_name, phone, user_id, is_avatar, region) VALUES ($1, $2, $3, $4, $5, $6);'''
         values = [
             user_info.user.first_name,
             user_info.user.last_name,
@@ -85,15 +85,13 @@ async def insert_users(users_list, client, db_conn):
             print(err)
 
 
-def find_spammers(users_list):
-    """Функция нахождения пользователей, отправляющих одинаковое сообщение больше N раз (N - устанавливается)"""
-    spammers = []
-    for user in users_list:
-        for message in users_list[user]:
-            if users_list[user][message] > config['SPAM_MORE']:
-                spammers.append(user)
-                break
-    return spammers
+def find_users(users_list):
+    """Функция нахождения пользователей, отправляющих одинаковое сообщение меньше N раз (N - опционально)"""
+    users = []
+    for user, counts in users_list.items():
+        if all([c <= config['NO_SPAM'] for c in counts.values()]):
+            users.append(user)
+    return users
 
 
 def go():
