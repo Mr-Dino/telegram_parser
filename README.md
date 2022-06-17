@@ -62,6 +62,5 @@ ___
 - api_id - получаем из Telegram (по ссылке https://my.telegram.org/auth)
 - в urls лежат списки url телеграм каналов, которые надо парсить
  - В PG лежат стандартные параметры для подключения к БД Postgres
-![config_photo](images/config_photo.png)
 - В PG лежат стандартные параметры для подключения к БД Postgres
 ![config_photo](images/config-photo.png)
